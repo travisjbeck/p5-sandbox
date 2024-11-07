@@ -1,8 +1,13 @@
+//when creating forces, gravity is different. Instead of dividing hte mass, you leave mass at 1, or before applying the force, you multiply the gravity force times your mass. 
+
+
+
 class Ball {
   constructor(width, x, y) {
     this.sWidth = window.innerWidth;
     this.sHeight = window.innerHeight;
     this.dim = width;
+    this.r = width / 2;
     this.hue = random(0, 360);
 
     x = x ?? random(this.sWidth);
@@ -13,42 +18,38 @@ class Ball {
     this.accel.setMag(random(50));
   }
 
-  draw() {
-    let hit = false;
-
+  edges() {
     //LEFT TO RIGHT EDGE DETECTION
-    if (this.accel.x > 0) {
-      //were going to the right
-      if ((this.sWidth - this.pos.x) <= (this.dim / 2)) {
-        this.accel.x *= -1;
-        hit = true;
-      };
-    } else {
-      //we're going to the left
-      if (this.pos.x <= (this.dim / 2)) {
-        this.accel.x *= -1;
-        hit = true;
-      }
+    if ((this.pos.x + this.r) >= this.sWidth) {
+      this.pos.x = this.sWidth - this.r;
+      this.accel.x *= -1;
+    } else if ((this.pos.x - this.r) < 0) {
+      this.pos.x = this.r;
+      this.accel.x *= -1;
     }
 
     //TOP TO BOTTOM EDGE DETECTION
-    if (this.accel.y > 0) {
-      if ((this.sHeight - this.pos.y) <= (this.dim / 2)) {
-        this.accel.y *= -1;
-        hit = true;
-      }
-    } else {
-      if (this.pos.y <= (this.dim / 2)) {
-        this.accel.y *= -1;
-        hit = true;
-      }
+    if ((this.pos.y + this.r) >= this.sHeight) {
+      this.pos.y = this.sHeight - this.r;
+      this.accel.y *= -1;
+    } else if ((this.pos.y - this.r) < 0) {
+      this.pos.y = this.r;
+      this.accel.y *= -1;
     }
+  }
 
-
+  update() {
     this.pos.add(this.accel);
-
     this.hue += 5;
-    fill(((this.hue + 360) % 360), 50, 50);
+  }
+
+  draw() {
+    let hit = false;
+
+    this.update();
+    this.edges();
+
+    fill(((this.hue + 360) % 360), 180, 50);
     circle(this.pos.x, this.pos.y, this.dim);
   }
 

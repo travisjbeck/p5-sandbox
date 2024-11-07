@@ -8,7 +8,7 @@ function setup() {
   createCanvas(width, height);
   background(0);
   colorMode(HSL)
-  balls = [new Ball(60), new Ball(50), new Ball(100)];
+  balls = [new Ball(60)];
 }
 
 function mouseClicked() {

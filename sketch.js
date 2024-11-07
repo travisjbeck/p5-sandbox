@@ -1,28 +1,52 @@
 const width = window.innerWidth;
 const height = window.innerHeight;
 
-const seed1 = { x: 604, y: 352 }
 let balls = [];
+let isMouseDown = false;
+let ballLauncher;
 
 function setup() {
   createCanvas(width, height);
   background(0);
   colorMode(HSL)
-  balls = [new Ball(60)];
+  balls = [];
+  ballLauncher = new BallLauncher();
 }
 
-function mouseClicked() {
-  const newBall = new Ball(random(250), mouseX, mouseY);
-  balls.push(newBall);
+
+function mousePressed() {
+  ballLauncher.mousePressed();
 }
 
+function mouseReleased() {
+  ballLauncher.mouseReleased();
+}
 
 function draw() {
   background(0);
   noStroke();
+
+  ballLauncher.draw();
+
+  if (ballLauncher.directionVector && ballLauncher.ballSize) {
+    const ball = new Ball(ballLauncher.ballSize, mouseX, mouseY);
+    ball.applyForce(ballLauncher.directionVector);
+    balls.push(ball);
+  }
+
   for (ball of balls) {
+
+    let gravity = createVector(0, 1.3);
+    gravity.mult(ball.mass);
+    ball.applyForce(gravity);
+
+    if (keyIsDown(32)) {  // 32 is the keyCode for space bar
+      let wind = createVector(1, 0);
+      //wind.setMag(50);
+      ball.applyForce(wind);
+    }
+
     ball.draw();
   }
   fill(255)
-  text(`${balls.length}`, 50, 50).textSize(40)
 }

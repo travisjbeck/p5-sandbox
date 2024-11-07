@@ -9,13 +9,18 @@ class Ball {
     this.dim = width;
     this.r = width / 2;
     this.hue = random(0, 360);
+    this.mass = this.r ^ 2;
 
     x = x ?? random(this.sWidth);
     y = y ?? random(this.sHeight);
 
     this.pos = createVector(x, y);
-    this.accel = p5.Vector.random2D();
-    this.accel.setMag(random(50));
+    this.accel = createVector(0, 0);
+  }
+
+  applyForce(force) {
+    let f = p5.Vector.div(force, this.mass)
+    this.accel.add(f);
   }
 
   edges() {
@@ -23,7 +28,7 @@ class Ball {
     if ((this.pos.x + this.r) >= this.sWidth) {
       this.pos.x = this.sWidth - this.r;
       this.accel.x *= -1;
-    } else if ((this.pos.x - this.r) < 0) {
+    } else if ((this.pos.x - this.r) <= 0) {
       this.pos.x = this.r;
       this.accel.x *= -1;
     }
@@ -32,7 +37,7 @@ class Ball {
     if ((this.pos.y + this.r) >= this.sHeight) {
       this.pos.y = this.sHeight - this.r;
       this.accel.y *= -1;
-    } else if ((this.pos.y - this.r) < 0) {
+    } else if ((this.pos.y - this.r) <= 0) {
       this.pos.y = this.r;
       this.accel.y *= -1;
     }
@@ -44,12 +49,11 @@ class Ball {
   }
 
   draw() {
-    let hit = false;
 
     this.update();
     this.edges();
 
-    fill(((this.hue + 360) % 360), 180, 50);
+    fill(((this.hue + 360) % 360), 50, 50);
     circle(this.pos.x, this.pos.y, this.dim);
   }
 

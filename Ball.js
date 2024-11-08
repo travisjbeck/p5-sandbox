@@ -1,6 +1,6 @@
 //when creating forces, gravity is different. Instead of dividing hte mass, you leave mass at 1, or before applying the force, you multiply the gravity force times your mass. 
 
-
+const MU = 0.2;
 
 class Ball {
   constructor(width, x, y) {
@@ -35,8 +35,22 @@ class Ball {
 
     //TOP TO BOTTOM EDGE DETECTION
     if ((this.pos.y + this.r) >= this.sHeight) {
+      //hit the bottom don't bounce so high
       this.pos.y = this.sHeight - this.r;
-      this.accel.y *= -1;
+      this.accel.y *= -0.8; //slow it down a bit
+
+      //get our current velocity
+      let friction = this.accel.copy();
+      //normalize to unit vector
+      friction.normalize();
+      friction.mult(-1)
+      //calculate magnitude
+
+      let normal = this.mass;
+      friction.setMag(MU * normal);
+      this.applyForce(friction)
+
+
     } else if ((this.pos.y - this.r) <= 0) {
       this.pos.y = this.r;
       this.accel.y *= -1;
@@ -45,7 +59,7 @@ class Ball {
 
   update() {
     this.pos.add(this.accel);
-    this.hue += 5;
+    //this.hue += 5;
   }
 
   draw() {
@@ -53,7 +67,7 @@ class Ball {
     this.update();
     this.edges();
 
-    fill(((this.hue + 360) % 360), 50, 50);
+    fill(((this.hue + 360) % 360), 50, 50, 0.5);
     circle(this.pos.x, this.pos.y, this.dim);
   }
 

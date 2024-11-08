@@ -1,5 +1,7 @@
 const width = window.innerWidth;
 const height = window.innerHeight;
+const windSpeed = 5;
+const gravitationalForce = 2;
 
 let balls = [];
 let isMouseDown = false;
@@ -7,12 +9,11 @@ let ballLauncher;
 
 function setup() {
   createCanvas(width, height);
-  background(0);
   colorMode(HSL)
   balls = [];
   ballLauncher = new BallLauncher();
+  background(0);
 }
-
 
 function mousePressed() {
   ballLauncher.mousePressed();
@@ -23,7 +24,7 @@ function mouseReleased() {
 }
 
 function draw() {
-  background(0);
+  background(0); // Hue=0, Saturation=0%, Lightness=20%, Alpha=0.2
   noStroke();
 
   ballLauncher.draw();
@@ -36,17 +37,16 @@ function draw() {
 
   for (ball of balls) {
 
-    let gravity = createVector(0, 1.3);
+    let gravity = createVector(0, gravitationalForce);
     gravity.mult(ball.mass);
     ball.applyForce(gravity);
 
     if (keyIsDown(32)) {  // 32 is the keyCode for space bar
-      let wind = createVector(1, 0);
+      let wind = createVector(windSpeed, 0);
       //wind.setMag(50);
       ball.applyForce(wind);
     }
 
     ball.draw();
   }
-  fill(255)
 }

@@ -33,6 +33,7 @@ class BallLauncher {
       this.v2 = createVector(mouseX, mouseY);
       stroke(255)
       line(this.v1.x, this.v1.y, this.v2.x, this.v2.y);
+      noStroke()
     } else if (this.v2) {
       this.directionVector = p5.Vector.sub(this.v2, this.v1).mult(-1, -1);
       this.directionVector.mult(2);

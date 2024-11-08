@@ -1,7 +1,7 @@
 const width = window.innerWidth;
 const height = window.innerHeight;
 const windSpeed = 5;
-const gravitationalForce = 2;
+let gravitationalForce = 2;
 
 let balls = [];
 let isMouseDown = false;
@@ -23,6 +23,13 @@ function mouseReleased() {
   ballLauncher.mouseReleased();
 }
 
+function keyPressed(key) {
+  if (key.code === "Space") {  // 32 is the keyCode for space bar
+    console.log('key is down');
+    gravitationalForce *= -1
+  }
+}
+
 function draw() {
   background(0); // Hue=0, Saturation=0%, Lightness=20%, Alpha=0.2
   noStroke();
@@ -41,11 +48,11 @@ function draw() {
     gravity.mult(ball.mass);
     ball.applyForce(gravity);
 
-    if (keyIsDown(32)) {  // 32 is the keyCode for space bar
-      let wind = createVector(windSpeed, 0);
-      //wind.setMag(50);
-      ball.applyForce(wind);
-    }
+    // if (keyIsDown(32)) {  // 32 is the keyCode for space bar
+    //   let wind = createVector(windSpeed, 0);
+    //   //wind.setMag(50);
+    //   ball.applyForce(wind);
+    // }
 
     ball.draw();
   }

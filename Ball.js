@@ -39,22 +39,28 @@ class Ball {
       this.pos.y = this.sHeight - this.r;
       this.accel.y *= -0.8; //slow it down a bit
 
-      //get our current velocity
-      let friction = this.accel.copy();
-      //normalize to unit vector
-      friction.normalize();
-      friction.mult(-1)
-      //calculate magnitude
-
-      let normal = this.mass;
-      friction.setMag(MU * normal);
-      this.applyForce(friction)
+      this.addFriction();
 
 
     } else if ((this.pos.y - this.r) <= 0) {
       this.pos.y = this.r;
-      this.accel.y *= -1;
+      this.accel.y *= -0.8;
+
+      this.addFriction();
     }
+  }
+
+  addFriction() {
+    //get our current velocity
+    let friction = this.accel.copy();
+    //normalize to unit vector
+    friction.normalize();
+    friction.mult(-1)
+    //calculate magnitude
+
+    let normal = this.mass;
+    friction.setMag(MU * normal);
+    this.applyForce(friction)
   }
 
   update() {

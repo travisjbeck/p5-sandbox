@@ -20,7 +20,7 @@ class BallLauncher {
     let pressDuration = millis() - this.pressedTime;
 
     // Normalize time (let's say max time is 2000ms)
-    let normalizedTime = constrain(pressDuration, 0, 3000);
+    let normalizedTime = constrain(pressDuration, 0, 2000);
 
     // Map the time to range 10-50
     this.ballSize = map(normalizedTime, 0, 2000, 3, 200);

@@ -25,7 +25,7 @@ function mouseReleased() {
 
 function keyPressed(key) {
   if (key.code === "Space") {  // 32 is the keyCode for space bar
-    console.log('key is down');
+    //reverse gravity
     gravitationalForce *= -1
   }
 }
@@ -36,8 +36,8 @@ function draw() {
 
   ballLauncher.draw();
 
-  if (ballLauncher.directionVector && ballLauncher.ballSize) {
-    const ball = new Ball(ballLauncher.ballSize, mouseX, mouseY);
+  if (ballLauncher.directionVector) {
+    const ball = new Ball(ballLauncher.ballSize, ballLauncher.v1.x, ballLauncher.v1.y, ballLauncher.hue);
     ball.applyForce(ballLauncher.directionVector);
     balls.push(ball);
   }

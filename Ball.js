@@ -1,5 +1,7 @@
-//when creating forces, gravity is different. Instead of dividing hte mass, you leave mass at 1, or before applying the force, you multiply the gravity force times your mass. 
+//when creating forces, gravity is different. Instead of dividing the mass, you leave mass at 1, or before applying the force, you multiply the gravity force times your mass. 
 
+
+//friction coefficient
 const MU = 0.2;
 
 class Ball {
@@ -28,24 +30,25 @@ class Ball {
     if ((this.pos.x + this.r) >= this.sWidth) {
       this.pos.x = this.sWidth - this.r;
       this.accel.x *= -1;
+      this.addFriction();
     } else if ((this.pos.x - this.r) <= 0) {
       this.pos.x = this.r;
       this.accel.x *= -1;
+      this.addFriction();
     }
 
     //TOP TO BOTTOM EDGE DETECTION
     if ((this.pos.y + this.r) >= this.sHeight) {
       //hit the bottom don't bounce so high
       this.pos.y = this.sHeight - this.r;
-      this.accel.y *= -0.8; //slow it down a bit
-
+      let dampening = map(this.mass, 1, 75, -1, 0);
+      this.accel.y *= dampening; //slow it down a bit
       this.addFriction();
-
-
     } else if ((this.pos.y - this.r) <= 0) {
-      this.pos.y = this.r;
-      this.accel.y *= -0.8;
+      let dampening = map(this.mass, 1, 75, -1, 0);
 
+      this.pos.y = this.r;
+      this.accel.y *= dampening;
       this.addFriction();
     }
   }
@@ -73,7 +76,7 @@ class Ball {
     this.update();
     this.edges();
 
-    fill(((this.hue + 360) % 360), 50, 50, 0.5);
+    fill(((this.hue + 360) % 360), 50, 50, 0.7);
     circle(this.pos.x, this.pos.y, this.dim);
   }
 
